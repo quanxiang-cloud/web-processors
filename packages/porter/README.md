@@ -3,6 +3,6 @@
 usage:
 
 ```bash
-./porter /path/to/source fs:/path/to/source
-./porter fs:/path/to/source /path/to/source
+hostname='example.com' ./porter download /path/in/bucket/file /path/to/local/file
+hostname='example.com' ./porter upload /path/to/local/file /path/in/bucket/file
 ```
