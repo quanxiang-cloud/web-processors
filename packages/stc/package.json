@@ -1,0 +1,28 @@
+{
+  "name": "stc",
+  "description": "compile scss to css",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "prepkg": "npm run build",
+    "pkg": "./node_modules/.bin/pkg -t node16-linux-x64 -o dist/stc lib/index.js",
+    "test": "jest",
+    "test:coverage": "jest --collectCoverage",
+    "updateSnapshot": "jest --updateSnapshot"
+  },
+  "dependencies": {
+    "sass": "1.50.0",
+    "@types/yargs": "^17.0.7",
+    "yargs": "^17.2.1",
+    "@types/node": "^16.11.12",
+    "pkg": "5.6.0",
+    "typescript": "^4.5.4",
+    "jest": "~27.5.1",
+    "ts-jest": "~27.1.4",
+    "@types/jest": "~27.4.1",
+    "@testing-library/jest-dom": "~5.16.4"
+  }
+}

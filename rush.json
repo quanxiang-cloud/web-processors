@@ -455,6 +455,10 @@
     {
       "packageName": "porter",
       "projectFolder": "packages/porter"
+    },
+    {
+      "packageName": "stc",
+      "projectFolder": "packages/stc"
     }
   ]
 }

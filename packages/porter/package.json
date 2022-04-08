@@ -8,7 +8,10 @@
   "scripts": {
     "build": "tsc",
     "prepkg": "npm run build",
-    "pkg": "./node_modules/.bin/pkg -t node16-linux-x64 -o dist/porter lib/index.js"
+    "pkg": "./node_modules/.bin/pkg -t node16-linux-x64 -o dist/porter lib/index.js",
+    "test": "jest",
+    "test:coverage": "jest --collectCoverage",
+    "updateSnapshot": "jest --updateSnapshot"
   },
   "dependencies": {
     "glob": "^7.2.0",
