@@ -1,0 +1,32 @@
+{
+  "name": "porter",
+  "version": "0.1.0",
+  "description": "utils for uploading and downloading files from/to file-server",
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "bin": "./lib/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "glob": "^7.2.0",
+    "mime-types": "^2.1.33",
+    "undici": "5.0.0",
+    "yargs": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mime-types": "^2.1.1",
+    "@types/node": "^16.11.12",
+    "@types/yargs": "^17.0.7",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^8.3.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "typescript": "^4.5.4"
+  },
+  "engines": {
+    "node": ">=16.13.0"
+  }
+}
