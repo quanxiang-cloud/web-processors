@@ -48,7 +48,7 @@ func (r *Router) Run() {
 }
 
 func assignRouter(c *config.Config, r map[string]*gin.RouterGroup) error {
-	r[assign].POST("/exec", Execute(chain.NewSCSS(c)))
+	r[assign].POST("/exec", Execute(chain.NewEvolution(c)))
 
 	return nil
 }

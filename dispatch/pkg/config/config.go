@@ -7,5 +7,6 @@ type Config struct {
 	CommandDir   string
 	UploadPrefix string
 
-	PersonaURL string
+	PersonaURL       string
+	PersonaKeySuffix string
 }

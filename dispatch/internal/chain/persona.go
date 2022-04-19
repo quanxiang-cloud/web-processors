@@ -3,12 +3,13 @@ package chain
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"os/exec"
 	"strings"
 
+	error2 "github.com/quanxiang-cloud/cabin/error"
 	"github.com/quanxiang-cloud/cabin/logger"
 	"github.com/quanxiang-cloud/cabin/tailormade/header"
+	"github.com/quanxiang-cloud/web-processors/dispatch/pkg/code"
 	"github.com/quanxiang-cloud/web-processors/dispatch/pkg/config"
 )
 
@@ -22,36 +23,42 @@ func NewPersona(conf *config.Config) *persona {
 }
 
 func (p *persona) Name() string {
-	return "persona"
+	return genCommandPath(p.conf.CommandDir, PersonaCommandName)
 }
 
 func (p *persona) Do(ctx context.Context, params *Parameter) error {
 	var (
 		stderr      bytes.Buffer
-		commandPath = fmt.Sprintf("%s/%s", p.conf.CommandDir, p.Name())
+		commandPath = p.Name()
 	)
 
+	// generate persona key
 	_, tenantIDValue := header.GetTenantID(ctx).Wreck()
-	param := []string{params.AppID, tenantIDValue, "style_guide_css:draft"}
-	key := strings.Join(p.removeEmptyStr(param), ":")
+	key := strings.Join(p.removeEmptyStr([]string{
+		tenantIDValue,
+		params.AppID,
+		p.conf.PersonaKeySuffix,
+	}), ":")
 
-	cmd := exec.Command(
-		commandPath,
-		"-url", p.conf.PersonaURL,
-		"-key", key,
-		"-value", params.StorePath,
-	)
-
-	cmd.Stderr = &stderr
+	cmd := exec.Cmd{
+		Path: commandPath,
+		Args: []string{
+			commandPath,
+			"-url", p.conf.PersonaURL,
+			"-key", key,
+			"-value", params.StorePath,
+		},
+		Stderr: &stderr,
+	}
 
 	if _, err := cmd.Output(); err != nil {
-		logger.Logger.Error("Execute Persona", "err", err.Error(), header.GetRequestIDKV(ctx).Fuzzy())
-
-		return err
+		logger.Logger.WithName("Execute Persona").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
+		return error2.New(code.ErrExecute)
 	}
 
 	if stderr.Len() > 0 {
-		logger.Logger.Errorw("Execute Fileserver", header.GetRequestIDKV(ctx).Fuzzy()...)
+		logger.Logger.WithName("Execute Fileserver").Errorw(stderr.String(), header.GetRequestIDKV(ctx).Fuzzy()...)
+		return error2.New(code.ErrExecute)
 	}
 
 	return nil

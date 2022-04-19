@@ -14,11 +14,12 @@ import (
 )
 
 var (
-	port         string
-	uploadDir    string
-	commandDir   string
-	uploadPrefix string
-	personaURL   string
+	port             string
+	uploadDir        string
+	commandDir       string
+	uploadPrefix     string
+	personaURL       string
+	personaKeySuffix string
 
 	level           int
 	development     bool
@@ -86,6 +87,7 @@ func loggerFlag() {
 	flag.StringVar(&commandDir, "command-dir", "scripts", "command dir")
 	flag.StringVar(&uploadPrefix, "upload-prefix", "web-processors/config/css", "upload prefix")
 	flag.StringVar(&personaURL, "persona-url", "http://persona/api/v1/persona/batchSetValue", "persona save url")
+	flag.StringVar(&personaKeySuffix, "persona-key-suffix", "style_guide_css:draft", "persona key suffix")
 
 	flag.IntVar(&level, "level", -1, "log level")
 	flag.BoolVar(&development, "development", false, "log development")
