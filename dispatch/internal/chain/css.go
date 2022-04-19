@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/quanxiang-cloud/cabin/logger"
@@ -28,7 +29,7 @@ func (c *css) Name() string {
 	return "css"
 }
 
-func (c *css) Do(ctx context.Context, args *Arg) error {
+func (c *css) Do(ctx context.Context, params *Parameter) error {
 	var (
 		stderr      bytes.Buffer
 		commandPath = fmt.Sprintf("%s/%s", c.conf.CommandDir, c.Name())
@@ -39,9 +40,17 @@ func (c *css) Do(ctx context.Context, args *Arg) error {
 
 	if _, err := cmd.Output(); err != nil {
 		logger.Logger.Error("execute css", "err", err.Error(), header.GetRequestIDKV(ctx).Fuzzy())
-
 		return err
 	}
 
-	return c.next.Do(ctx, args)
+	if stderr.Len() > 0 {
+		logger.Logger.Error("execute css", "err", stderr.String(), header.GetRequestIDKV(ctx).Fuzzy())
+		return nil
+	}
+
+	params.CssFilePath = os.Getenv("CSS_FILE_PATH")
+
+	defer os.RemoveAll(params.CssFilePath)
+
+	return c.next.Do(ctx, params)
 }

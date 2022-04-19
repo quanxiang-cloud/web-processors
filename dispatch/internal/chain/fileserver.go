@@ -27,18 +27,21 @@ func (f *fileserver) Name() string {
 	return "fileserver"
 }
 
-func (f *fileserver) Do(ctx context.Context, args *Arg) error {
+func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 	var (
 		stderr      bytes.Buffer
 		commandPath = fmt.Sprintf("%s/%s", f.conf.CommandDir, f.Name())
 	)
 
-	uploadpath := fmt.Sprintf("%s/%s/%s", f.conf.UploadPrefix, "hash", args.File.Filename)
+	uploadpath := fmt.Sprintf("%s/%s/%s", f.conf.UploadPrefix, "hash", params.File.Filename)
 	cmd := exec.Command(
 		commandPath,
-		"-filePath", args.CssFilePath,
+		"-filePath", params.CssFilePath,
 		"-uploadPath", uploadpath,
 	)
+
+	cmd.Stderr = &stderr
+	params.StorePath = uploadpath
 
 	if _, err := cmd.Output(); err != nil {
 		logger.Logger.Error("Execute Fileserver", "err", err.Error(), header.GetRequestIDKV(ctx).Fuzzy())
@@ -50,5 +53,5 @@ func (f *fileserver) Do(ctx context.Context, args *Arg) error {
 		logger.Logger.Errorw("Execute Fileserver", header.GetRequestIDKV(ctx).Fuzzy()...)
 	}
 
-	return f.next.Do(ctx, args)
+	return f.next.Do(ctx, params)
 }

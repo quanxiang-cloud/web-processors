@@ -15,13 +15,13 @@ func Execute(cmd chain.Command) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := header.MutateContext(c)
 
-		args := &chain.Arg{}
-		if err := c.ShouldBind(args); err != nil {
+		params := &chain.Parameter{}
+		if err := c.ShouldBind(params); err != nil {
 			logger.Logger.WithName("Bind Parma").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 			resp.Format(nil, err).Context(c, http.StatusBadRequest)
 		}
 
-		if err := cmd.Do(ctx, args); err != nil {
+		if err := cmd.Do(ctx, params); err != nil {
 			resp.Format(nil, err).Context(c, http.StatusInternalServerError)
 		}
 

@@ -30,21 +30,22 @@ func (s *scss) Name() string {
 	return "scss"
 }
 
-func (s *scss) Do(ctx context.Context, args *Arg) error {
+func (s *scss) Do(ctx context.Context, params *Parameter) error {
 	err := os.MkdirAll(s.conf.UploadDir, 0o655)
 	if err != nil {
 		logger.Logger.WithName("Create Dir").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return err
 	}
 
-	saveUploadPath := fmt.Sprintf("%s/%s", s.conf.UploadDir, args.File.Filename)
-	err = s.saveUploadedFile(args.File, saveUploadPath)
+	saveUploadPath := fmt.Sprintf("%s/%s", s.conf.UploadDir, params.File.Filename)
+	err = s.saveUploadedFile(params.File, saveUploadPath)
 	if err != nil {
 		logger.Logger.WithName("Save File").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return err
 	}
+	defer os.Remove(saveUploadPath)
 
-	args.UploadFilePath = saveUploadPath
+	params.UploadFilePath = saveUploadPath
 
 	var (
 		stderr      bytes.Buffer
@@ -53,7 +54,7 @@ func (s *scss) Do(ctx context.Context, args *Arg) error {
 
 	cmd := exec.Command(
 		commandPath,
-		"-f", args.UploadFilePath,
+		"-f", params.UploadFilePath,
 	)
 	cmd.Stderr = &stderr
 	if _, err := cmd.Output(); err != nil {
@@ -61,7 +62,7 @@ func (s *scss) Do(ctx context.Context, args *Arg) error {
 		return err
 	}
 
-	return s.next.Do(ctx, args)
+	return s.next.Do(ctx, params)
 }
 
 func (s *scss) saveUploadedFile(file *multipart.FileHeader, dst string) error {
