@@ -19,10 +19,12 @@ func Execute(cmd chain.Command) gin.HandlerFunc {
 		if err := c.ShouldBind(params); err != nil {
 			logger.Logger.WithName("Bind Parma").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 			resp.Format(nil, err).Context(c, http.StatusBadRequest)
+			return
 		}
 
 		if err := cmd.Do(ctx, params); err != nil {
 			resp.Format(nil, err).Context(c, http.StatusInternalServerError)
+			return
 		}
 
 		resp.Format(nil, nil).Context(c, http.StatusOK)

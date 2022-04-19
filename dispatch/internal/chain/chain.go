@@ -2,6 +2,7 @@ package chain
 
 import (
 	"context"
+	"fmt"
 	"mime/multipart"
 )
 
@@ -10,19 +11,39 @@ type Command interface {
 	Do(ctx context.Context, args *Parameter) error
 }
 
-// 参数.
+// Parameter parameter.
 type Parameter struct {
+	AppID string                `form:"appID"`
 	Token string                `form:"token" binding:"required"`
 	File  *multipart.FileHeader `form:"file" binding:"required"`
-	AppID string                `form:"app_id" binding:"required"`
 
 	Universal
 }
 
+// Universal is the universal parameter.
 type Universal struct {
-	// XXX: xxxxxxxx
 	UploadFilePath string
 	CssFilePath    string
+	CssFileHash    string
+	StorePath      string
+}
 
-	StorePath string
+// command name.
+const (
+	EvolutionCommandName  = "evolution"
+	FileserverCommandName = "fileserver"
+	PersonaCommandName    = "persona"
+)
+
+func genCommandPath(dir, name string) string {
+	return fmt.Sprintf("%s/%s", dir, name)
+}
+
+// env name.
+const (
+	INPUTFILE = "INPUT_FILE"
+)
+
+func genEnv(key, value string) string {
+	return fmt.Sprintf("%s=%s", key, value)
 }
