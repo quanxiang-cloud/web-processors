@@ -6,4 +6,6 @@ type Config struct {
 	UploadDir    string
 	CommandDir   string
 	UploadPrefix string
+
+	PersonaURL string
 }

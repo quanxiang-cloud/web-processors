@@ -18,6 +18,7 @@ var (
 	uploadDir    string
 	commandDir   string
 	uploadPrefix string
+	personaURL   string
 
 	level           int
 	development     bool
@@ -44,6 +45,7 @@ func main() {
 		UploadDir:    uploadDir,
 		CommandDir:   commandDir,
 		UploadPrefix: uploadPrefix,
+		PersonaURL:   personaURL,
 	}
 	router, err := router.NewRouter(conf)
 	if err != nil {
@@ -78,11 +80,12 @@ func (a *Arr) Set(s string) error {
 }
 
 func loggerFlag() {
-	flag.StringVar(&port, "port", ":80", "grpc port")
+	flag.StringVar(&port, "port", ":80", "port")
 	flag.StringVar(&uploadDir, "upload-dir", ".", "upload dir")
 	// NOTE: command save directory is consistent with the save directory in dockerfile
 	flag.StringVar(&commandDir, "command-dir", "scripts", "command dir")
 	flag.StringVar(&uploadPrefix, "upload-prefix", "web-processors/config/css", "upload prefix")
+	flag.StringVar(&personaURL, "persona-url", "http://persona/api/v1/persona/batchSetValue", "persona save url")
 
 	flag.IntVar(&level, "level", -1, "log level")
 	flag.BoolVar(&development, "development", false, "log development")
