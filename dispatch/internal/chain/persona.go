@@ -33,12 +33,7 @@ func (p *persona) Do(ctx context.Context, params *Parameter) error {
 	)
 
 	// generate persona key
-	_, tenantIDValue := header.GetTenantID(ctx).Wreck()
-	key := strings.Join(p.removeEmptyStr([]string{
-		tenantIDValue,
-		params.AppID,
-		p.conf.PersonaKeySuffix,
-	}), ":")
+	key := p.genPersonaKey(ctx, params)
 
 	cmd := exec.Cmd{
 		Path: commandPath,
@@ -62,6 +57,17 @@ func (p *persona) Do(ctx context.Context, params *Parameter) error {
 	}
 
 	return nil
+}
+
+func (p *persona) genPersonaKey(ctx context.Context, params *Parameter) string {
+	_, tenantIDValue := header.GetTenantID(ctx).Wreck()
+	key := strings.Join(p.removeEmptyStr([]string{
+		tenantIDValue,
+		params.AppID,
+		p.conf.PersonaKeySuffix,
+	}), ":")
+
+	return key
 }
 
 func (p *persona) removeEmptyStr(s []string) []string {
