@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	filePath   = flag.String("filePath", "", "file path")
-	uploadPath = flag.String("uploadPath", "", "upload path")
+	filePath  = flag.String("filePath", "", "file path")
+	storePath = flag.String("storePath", "", "store path")
 )
 
 func main() {
@@ -18,33 +18,21 @@ func main() {
 
 	file, err := os.Open(*filePath)
 	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.Sync()
-
-		return
+		panic(err)
 	}
 
 	fi, err := file.Stat()
 	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.Sync()
-
-		return
+		panic(err)
 	}
 
 	g, err := guide.NewGuide()
 	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.Sync()
-
-		return
+		panic(err)
 	}
 
-	err = g.FutileUploadFile(context.Background(), *uploadPath, file, fi.Size(), guide.Readable)
+	err = g.FutileUploadFile(context.Background(), *storePath, file, fi.Size(), guide.Readable)
 	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.Sync()
-
-		return
+		panic(err)
 	}
 }

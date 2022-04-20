@@ -18,7 +18,7 @@ func Execute(cmd chain.Command) gin.HandlerFunc {
 		params := &chain.Parameter{}
 		if err := c.ShouldBind(params); err != nil {
 			logger.Logger.WithName("Bind Parma").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
-			resp.Format(nil, err).Context(c, http.StatusBadRequest)
+			resp.Format(nil, err).Context(c)
 			return
 		}
 

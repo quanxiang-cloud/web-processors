@@ -1,7 +1,6 @@
 package chain
 
 import (
-	"bytes"
 	"context"
 	"os/exec"
 	"strings"
@@ -29,32 +28,23 @@ func (p *persona) Name() string {
 }
 
 func (p *persona) Do(ctx context.Context, params *Parameter) error {
-	var (
-		stderr      bytes.Buffer
-		commandPath = p.Name()
-	)
-
 	// generate persona key
 	key := p.genPersonaKey(ctx, params)
+	logger.Logger.Info("Persona key: ", key)
 
 	cmd := exec.Cmd{
-		Path: commandPath,
+		Path: p.Name(),
 		Args: []string{
-			commandPath,
-			"-url", p.conf.PersonaURL,
+			p.Name(),
+			"-endpoint", p.conf.PersonaEndpoint,
+			"-version", p.conf.PersonaVersion,
 			"-key", key,
 			"-value", params.StorePath,
 		},
-		Stderr: &stderr,
 	}
 
-	if _, err := cmd.Output(); err != nil {
+	if err := cmd.Run(); err != nil {
 		logger.Logger.WithName("Execute Persona").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
-		return error2.New(code.ErrExecute)
-	}
-
-	if stderr.Len() > 0 {
-		logger.Logger.WithName("Execute Fileserver").Errorw(stderr.String(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
 

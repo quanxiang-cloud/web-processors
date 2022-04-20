@@ -1,11 +1,8 @@
 package chain
 
 import (
-	"bytes"
 	"context"
 	"fmt"
-	"io"
-	"mime/multipart"
 	"os"
 	"os/exec"
 	"strings"
@@ -35,7 +32,7 @@ func (e *evolution) Name() string {
 }
 
 func (e *evolution) Do(ctx context.Context, params *Parameter) error {
-	saveUploadPath, err := e.saveUploadedFile(params.File)
+	saveUploadPath, err := e.saveUploadedFile(params.Element)
 	if err != nil {
 		logger.Logger.WithName("Save File").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrSaveFile)
@@ -43,28 +40,17 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 
 	defer os.Remove(saveUploadPath)
 
-	var (
-		stderr      bytes.Buffer
-		commandPath = e.Name()
-	)
-
 	cmd := &exec.Cmd{
-		Path: commandPath,
+		Path: e.Name(),
 		Env: []string{
-			genEnv(INPUTFILE, saveUploadPath),
+			genEnv(INPUT_FILE, saveUploadPath),
+			genEnv(PERSONA_HOSTNAME, e.conf.PersonaEndpoint),
 		},
-
-		Stderr: &stderr,
 	}
 
 	stdout, err := cmd.Output()
 	if err != nil {
 		logger.Logger.WithName("Execute evolution").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
-		return error2.New(code.ErrExecute)
-	}
-
-	if stderr.Len() > 0 {
-		logger.Logger.WithName("Execute evolution").Errorw(stderr.String(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
 
@@ -75,25 +61,19 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 	}
 
 	params.UploadFilePath = saveUploadPath
-	params.CssFilePath = arr[0]
-	params.CssFileHash = arr[1]
+	params.CssFileHash = arr[0]
+	params.CssFilePath = arr[1]
 
 	return e.next.Do(ctx, params)
 }
 
-func (e *evolution) saveUploadedFile(file *multipart.FileHeader) (string, error) {
+func (e *evolution) saveUploadedFile(elem string) (string, error) {
 	err := os.MkdirAll(e.conf.UploadDir, os.ModePerm)
 	if err != nil {
 		return "", err
 	}
 
-	dst := fmt.Sprintf("%s/%s", e.conf.UploadDir, file.Filename)
-
-	src, err := file.Open()
-	if err != nil {
-		return "", err
-	}
-	defer src.Close()
+	dst := fmt.Sprintf("%s/%s", e.conf.UploadDir, uploadFileName)
 
 	out, err := os.Create(dst)
 	if err != nil {
@@ -101,6 +81,6 @@ func (e *evolution) saveUploadedFile(file *multipart.FileHeader) (string, error)
 	}
 	defer out.Close()
 
-	_, err = io.Copy(out, src)
+	_, err = out.WriteString(elem)
 	return dst, err
 }
