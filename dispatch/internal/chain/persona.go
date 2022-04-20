@@ -43,8 +43,7 @@ func (p *persona) Do(ctx context.Context, params *Parameter) error {
 		},
 	}
 
-	_, err := execute(cmd, params)
-	if err != nil {
+	if _, err := execute(cmd); err != nil {
 		logger.Logger.WithName("Execute Persona").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}

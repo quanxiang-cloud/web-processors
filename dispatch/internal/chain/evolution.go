@@ -47,7 +47,7 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 		},
 	}
 
-	stdout, err := execute(cmd, params)
+	stdout, err := execute(cmd)
 	if err != nil {
 		logger.Logger.WithName("Execute Evolution").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)

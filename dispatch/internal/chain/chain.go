@@ -54,7 +54,8 @@ func genEnv(key, value string) string {
 	return fmt.Sprintf("%s=%s", key, value)
 }
 
-func execute(cmd *exec.Cmd, params *Parameter) (string, error) {
+func execute(cmd *exec.Cmd) (string, error) {
+	// get stdout and stderr readCloser
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return "", err
@@ -67,6 +68,7 @@ func execute(cmd *exec.Cmd, params *Parameter) (string, error) {
 	}
 	defer stderr.Close()
 
+	// start command.
 	if err := cmd.Start(); err != nil {
 		return "", err
 	}
