@@ -39,7 +39,7 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 
 	defer os.RemoveAll(params.CssFilePath)
 
-	cmd := exec.Cmd{
+	cmd := &exec.Cmd{
 		Path: commandPath,
 		Args: []string{
 			commandPath,
@@ -48,7 +48,8 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 		},
 	}
 
-	if err := cmd.Run(); err != nil {
+	_, err := execute(cmd, params)
+	if err != nil {
 		logger.Logger.WithName("Execute Fileserver").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
