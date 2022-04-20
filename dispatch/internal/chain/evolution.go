@@ -82,7 +82,7 @@ func (s *evolution) Do(ctx context.Context, params *Parameter) error {
 }
 
 func (s *evolution) saveUploadedFile(file *multipart.FileHeader) (string, error) {
-	err := os.MkdirAll(s.conf.UploadDir, 0o666)
+	err := os.MkdirAll(s.conf.UploadDir, os.ModePerm)
 	if err != nil {
 		return "", err
 	}

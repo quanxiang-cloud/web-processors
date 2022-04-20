@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 
 	error2 "github.com/quanxiang-cloud/cabin/error"
@@ -36,6 +37,8 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 		commandPath = f.Name()
 		storePath   = f.genStorePath(params)
 	)
+
+	defer os.RemoveAll(params.CssFilePath)
 
 	cmd := exec.Cmd{
 		Path: commandPath,
