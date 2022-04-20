@@ -3,16 +3,18 @@ package main
 import (
 	"context"
 	"flag"
-	"os"
+	"fmt"
 	"time"
 
 	"github.com/quanxiang-cloud/cabin/tailormade/client"
 )
 
 var (
-	url          = flag.String("url", "http://persona/api/v1/persona/batchSetValue", "url")
-	timeout      = flag.Duration("timeout", 10*time.Second, "timeout")
+	endpoint     = flag.String("endpoint", "http://persona", "endpoint")
+	api          = flag.String("api", "api/v1/persona/batchSetValue", "api")
+	timeout      = flag.Duration("timeout", time.Duration(10)*time.Second, "timeout")
 	maxIdleConns = flag.Int("maxIdleConns", 10, "maxIdleConns")
+	version      = flag.String("version", "", "version")
 	key          = flag.String("key", "", "key")
 	value        = flag.String("value", "", "value")
 )
@@ -25,12 +27,13 @@ func main() {
 		MaxIdleConns: *maxIdleConns,
 	})
 
-	err := client.POST(context.Background(), &a, *url, struct {
+	url := fmt.Sprintf("%s/%s", *endpoint, *api)
+	err := client.POST(context.Background(), &a, url, struct {
 		Params []map[string]interface{} `json:"params"`
 	}{
 		Params: []map[string]interface{}{
 			{
-				"version": "1.0",
+				"version": *version,
 				"key":     *key,
 				"value":   *value,
 			},
@@ -39,9 +42,6 @@ func main() {
 		&struct{}{},
 	)
 	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.Sync()
-
-		return
+		panic(err)
 	}
 }

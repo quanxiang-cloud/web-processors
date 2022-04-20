@@ -3,7 +3,6 @@ package chain
 import (
 	"context"
 	"fmt"
-	"mime/multipart"
 )
 
 // Command is the interface that wraps the basic 'Do' method.
@@ -13,9 +12,9 @@ type Command interface {
 
 // Parameter parameter.
 type Parameter struct {
-	AppID string                `form:"appID"`
-	Token string                `form:"token" binding:"required"`
-	File  *multipart.FileHeader `form:"file" binding:"required"`
+	AppID string `json:"appID"`
+	// Token string `json:"token" binding:"required"`
+	Element string `json:"element" binding:"required"`
 
 	Universal
 }
@@ -27,6 +26,10 @@ type Universal struct {
 	CssFileHash    string
 	StorePath      string
 }
+
+const (
+	uploadFileName = "input_file.txt"
+)
 
 // command name.
 const (
@@ -41,7 +44,8 @@ func genCommandPath(dir, name string) string {
 
 // env name.
 const (
-	INPUTFILE = "INPUT_FILE"
+	INPUT_FILE       = "INPUT_FILE"
+	PERSONA_HOSTNAME = "PERSONA_HOST_NAME"
 )
 
 func genEnv(key, value string) string {

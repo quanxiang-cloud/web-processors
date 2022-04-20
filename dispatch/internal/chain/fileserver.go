@@ -1,11 +1,11 @@
 package chain
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	error2 "github.com/quanxiang-cloud/cabin/error"
 	"github.com/quanxiang-cloud/cabin/logger"
@@ -33,7 +33,6 @@ func (f *fileserver) Name() string {
 
 func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 	var (
-		stderr      bytes.Buffer
 		commandPath = f.Name()
 		storePath   = f.genStorePath(params)
 	)
@@ -45,18 +44,12 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 		Args: []string{
 			commandPath,
 			"-filePath", params.CssFilePath,
-			"-uploadPath", storePath,
+			"-storePath", storePath,
 		},
-		Stderr: &stderr,
 	}
 
-	if _, err := cmd.Output(); err != nil {
+	if err := cmd.Run(); err != nil {
 		logger.Logger.WithName("Execute Fileserver").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
-		return error2.New(code.ErrExecute)
-	}
-
-	if stderr.Len() > 0 {
-		logger.Logger.WithName("Execute Fileserver").Errorw(stderr.String(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
 
@@ -66,10 +59,12 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 }
 
 func (f *fileserver) genStorePath(params *Parameter) string {
+	_, filename := filepath.Split(params.CssFilePath)
+
 	return fmt.Sprintf(
 		"%s/%s/%s",
 		f.conf.UploadPrefix,
 		params.CssFileHash,
-		params.File.Filename,
+		filename,
 	)
 }
