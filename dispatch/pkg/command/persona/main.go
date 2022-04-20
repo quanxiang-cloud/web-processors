@@ -12,7 +12,7 @@ import (
 var (
 	endpoint     = flag.String("endpoint", "http://persona", "endpoint")
 	api          = flag.String("api", "api/v1/persona/batchSetValue", "api")
-	timeout      = flag.Duration("timeout", time.Duration(10)*time.Second, "timeout")
+	timeout      = flag.Duration("timeout", 10*time.Second, "timeout")
 	maxIdleConns = flag.Int("maxIdleConns", 10, "maxIdleConns")
 	version      = flag.String("version", "", "version")
 	key          = flag.String("key", "", "key")
