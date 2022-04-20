@@ -30,12 +30,12 @@ func NewEvolution(conf *config.Config) *evolution {
 	}
 }
 
-func (s *evolution) Name() string {
-	return genCommandPath(s.conf.CommandDir, EvolutionCommandName)
+func (e *evolution) Name() string {
+	return genCommandPath(e.conf.CommandDir, EvolutionCommandName)
 }
 
-func (s *evolution) Do(ctx context.Context, params *Parameter) error {
-	saveUploadPath, err := s.saveUploadedFile(params.File)
+func (e *evolution) Do(ctx context.Context, params *Parameter) error {
+	saveUploadPath, err := e.saveUploadedFile(params.File)
 	if err != nil {
 		logger.Logger.WithName("Save File").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrSaveFile)
@@ -45,7 +45,7 @@ func (s *evolution) Do(ctx context.Context, params *Parameter) error {
 
 	var (
 		stderr      bytes.Buffer
-		commandPath = s.Name()
+		commandPath = e.Name()
 	)
 
 	cmd := &exec.Cmd{
@@ -78,16 +78,16 @@ func (s *evolution) Do(ctx context.Context, params *Parameter) error {
 	params.CssFilePath = arr[0]
 	params.CssFileHash = arr[1]
 
-	return s.next.Do(ctx, params)
+	return e.next.Do(ctx, params)
 }
 
-func (s *evolution) saveUploadedFile(file *multipart.FileHeader) (string, error) {
-	err := os.MkdirAll(s.conf.UploadDir, os.ModePerm)
+func (e *evolution) saveUploadedFile(file *multipart.FileHeader) (string, error) {
+	err := os.MkdirAll(e.conf.UploadDir, os.ModePerm)
 	if err != nil {
 		return "", err
 	}
 
-	dst := fmt.Sprintf("%s/%s", s.conf.UploadDir, file.Filename)
+	dst := fmt.Sprintf("%s/%s", e.conf.UploadDir, file.Filename)
 
 	src, err := file.Open()
 	if err != nil {
