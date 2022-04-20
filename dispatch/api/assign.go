@@ -23,7 +23,7 @@ func Execute(cmd chain.Command) gin.HandlerFunc {
 		}
 
 		if err := cmd.Do(ctx, params); err != nil {
-			resp.Format(nil, err).Context(c, http.StatusInternalServerError)
+			resp.Format(nil, err).Context(c)
 			return
 		}
 
