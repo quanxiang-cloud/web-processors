@@ -22,6 +22,7 @@ type fileserver struct {
 func NewFileserver(conf *config.Config) *fileserver {
 	return &fileserver{
 		next: NewPersona(conf),
+		conf: conf,
 	}
 }
 
