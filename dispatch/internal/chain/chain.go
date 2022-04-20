@@ -3,6 +3,8 @@ package chain
 import (
 	"context"
 	"fmt"
+	"io"
+	"os/exec"
 )
 
 // Command is the interface that wraps the basic 'Do' method.
@@ -50,4 +52,42 @@ const (
 
 func genEnv(key, value string) string {
 	return fmt.Sprintf("%s=%s", key, value)
+}
+
+func execute(cmd *exec.Cmd, params *Parameter) (string, error) {
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return "", err
+	}
+	defer stdout.Close()
+
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return "", err
+	}
+	defer stderr.Close()
+
+	if err := cmd.Start(); err != nil {
+		return "", err
+	}
+
+	stdoutBuf, err := io.ReadAll(stdout)
+	if err != nil {
+		return "", err
+	}
+
+	stderrBuf, err := io.ReadAll(stderr)
+	if err != nil {
+		return "", err
+	}
+
+	// wait for the command to complete
+	// nolint: errcheck
+	cmd.Wait()
+
+	if !cmd.ProcessState.Success() {
+		return "", fmt.Errorf("%s", stderrBuf)
+	}
+
+	return string(stdoutBuf), nil
 }

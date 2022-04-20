@@ -37,7 +37,6 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 		logger.Logger.WithName("Save File").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrSaveFile)
 	}
-
 	defer os.Remove(saveUploadPath)
 
 	cmd := &exec.Cmd{
@@ -48,21 +47,16 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 		},
 	}
 
-	stdout, err := cmd.Output()
+	stdout, err := execute(cmd, params)
 	if err != nil {
-		logger.Logger.WithName("Execute evolution").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
+		logger.Logger.WithName("Execute Evolution").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
 
-	arr := strings.Split(string(stdout), ",")
-	if len(arr) != 2 {
-		logger.Logger.WithName("Execute evolution").Errorw("Execute evolution error", header.GetRequestIDKV(ctx).Fuzzy()...)
-		return error2.New(code.ErrExecute)
-	}
-
-	params.UploadFilePath = saveUploadPath
+	arr := strings.Split(stdout, ",")
 	params.CssFileHash = arr[0]
 	params.CssFilePath = arr[1]
+	params.UploadFilePath = saveUploadPath
 
 	return e.next.Do(ctx, params)
 }

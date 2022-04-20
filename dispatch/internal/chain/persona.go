@@ -32,7 +32,7 @@ func (p *persona) Do(ctx context.Context, params *Parameter) error {
 	key := p.genPersonaKey(ctx, params)
 	logger.Logger.Info("Persona key: ", key)
 
-	cmd := exec.Cmd{
+	cmd := &exec.Cmd{
 		Path: p.Name(),
 		Args: []string{
 			p.Name(),
@@ -43,7 +43,8 @@ func (p *persona) Do(ctx context.Context, params *Parameter) error {
 		},
 	}
 
-	if err := cmd.Run(); err != nil {
+	_, err := execute(cmd, params)
+	if err != nil {
 		logger.Logger.WithName("Execute Persona").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
