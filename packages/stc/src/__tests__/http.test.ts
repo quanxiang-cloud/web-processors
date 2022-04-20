@@ -1,18 +1,22 @@
-import fs from 'fs';
-import path from 'path';
-import { fetchScssStr } from '../http';
-import { combineScss, parseParams } from '../utils';
-import compile from '../compile';
+import { fetch, fetchAllScssStr } from '../http';
+import { buildURL, parseInput } from '../utils';
 
-it('works with promises', () => {
-  const params = parseParams();
+const apiURL = buildURL('/api/v1/persona/batchGetValue');
+
+it('works with url', () => {
   expect.assertions(1);
-  return fetchScssStr(params).then((res) => {
-    expect(res).not.toBeNull();
-    const finalScssFilePath = path.join(__dirname, '../final.scss'); 
-    const finalCssFilePath = path.join(__dirname, '../final.css');
-    combineScss(res, finalScssFilePath);
-    compile(finalScssFilePath, finalCssFilePath);
-    fs.rm(finalScssFilePath, () => null);
-  });
+  return fetch(apiURL, {keys:[{design_token_key:{key:'GLOBAL_BASE_STYLE_CONFIG',version:'0.1.0'}}]}).then((res) => expect(res).not.toBeNull());
+});
+
+test('works with promises', done => {
+  function callback(data: unknown) {
+    expect(data).not.toBeNull();
+    done();
+  }
+
+  const params = parseInput();
+  fetchAllScssStr(apiURL, params).then((res) => {
+    const isArray = Array.isArray(res);
+    expect(isArray).toBeTruthy();
+  }).then(callback);
 });

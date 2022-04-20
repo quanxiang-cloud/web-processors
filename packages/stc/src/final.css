@@ -1,17 +1,8 @@
-.ofa-btn {
-  border-radius: 8px 2px 8px 8px;
-  background-color: #fff;
-  border: 1px solid var(--gray-700);
-  padding-left: 16px;
-  padding-right: 16px;
-  height: 32px;
-  font-weight: 500;
-  color: var(--gray-600);
-  background: var(--accent-default);
+.foo {
+  color: red;
 }
 
-.ofa-btn:hover {
-  color: #fff;
-  background-color: var(--blue-600);
-  border-color: var(--gray-800);
+.test {
+  width: "100px";
+  color: var("--red-600");
 }

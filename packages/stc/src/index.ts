@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import compile from './compile';
-import { fetchScssStr } from './http';
-import { combineScss, parseParams } from './utils';
+import { fetchAllScssStr } from './http';
+import { buildURL, combineScss, parseInput } from './utils';
 
 try {
-  const params = parseParams();
+  const params = parseInput();
+  const apiUrl = buildURL('/api/v1/persona/batchGetValue');
   // post to get all scss file content
-  fetchScssStr(params).then((res) => {
+  fetchAllScssStr(apiUrl, params).then((res) => {
     const finalScssFilePath = './final.scss'
     const finalCssFilePath = './final.css';
     combineScss(res, finalScssFilePath);
@@ -15,5 +16,5 @@ try {
     fs.rm(finalScssFilePath, () => null);
   });
 } catch(error) {
-  process.stderr.write(String(error));
+  throw error;
 }
