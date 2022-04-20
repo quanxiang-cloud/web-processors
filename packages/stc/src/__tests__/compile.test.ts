@@ -18,10 +18,6 @@ test('compile', () => {
 .test {
   width: \\"100px\\";
   color: var(\\"--red-600\\");
-}
-
-.unkonw {
-  padding-top: 20%;
 }"
 `)
 })

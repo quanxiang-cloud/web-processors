@@ -1,10 +1,7 @@
 import { request } from 'undici';
 
-const hostname = process.env.PERSONA_HOSTNAME || 'persona.alpha';
-
 // post to get all scss file content
-export async function fetchScssStr(params: any): Promise<Record<string, string>> {
-  const api = `http://${hostname}/api/v1/persona/batchGetValue`;
+export async function fetch(api: string, params: Record<string, unknown>): Promise<Record<string, string>> {
   const { body, statusCode, } = await request(api, {
     method: 'POST',
     body: JSON.stringify(params),
@@ -18,4 +15,8 @@ export async function fetchScssStr(params: any): Promise<Record<string, string>>
   const { data } = await body.json();
   
   return Promise.resolve(data.result);
+}
+
+export async function fetchAllScssStr(api: string, params: Record<string, unknown>[]): Promise<any> {
+  return Promise.all(params.map((keys) => fetch(api, keys)));
 }

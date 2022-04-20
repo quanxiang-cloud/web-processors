@@ -1,11 +1,21 @@
 import fs from "fs";
 import path from 'path';
 
-export function parseParams() {
-  let inputFile = process.env.INPUT_FILE;
+const hostname = process.env.hostname || 'http://persona.alpha'; 
+
+export function buildURL(targetPath: string): string {
+  return `${hostname}${targetPath}`;
+}
+
+export function parseInput() {
+  // // debug use
+  // let inputFile = process.env.INPUT_FILE;
+  // if (!inputFile) {
+  //   inputFile = path.join(__dirname, './mock-task-input.txt');
+  // }
+  const inputFile = process.env.INPUT_FILE;
   if (!inputFile) {
-    // throw new Error("failed to get INPUT_FILE in process env");
-    inputFile = path.join(__dirname, './mock-task-input.txt');
+    throw new Error("failed to get INPUT_FILE in process env");
   }
 
   const inputsStr = fs.readFileSync(inputFile, { encoding: 'utf-8' });
@@ -14,34 +24,35 @@ export function parseParams() {
   }
   
   const inputs = JSON.parse(inputsStr);
-  const keys = Object.entries(inputs).reduce((acc: any, [_, {key, version}]: any) => {
-    if (typeof key === 'string') {
-      acc.push({ key, version })
-    }
-
+  const keys = Object.entries(inputs).map(([_, key]) => key).map(({key, version}: any) => {
     if (Array.isArray(key)) {
-      key.forEach((_key) => {
-        acc.push({ key: _key, version })
-      })
+      const keys = key.map((key) => ({key, version}))
+      return { keys };
     }
 
-    return acc;
-  }, []);
+    return { keys: [{ key, version }] };
+  })
 
-  return { keys };
+  return keys;
 }
 
-export function combineScss(data: Record<string, string>, finalScssFile: string) {
+export function getScssStrMap(data: Record<string, string>[]) {
+  return data.reduce((acc, keyValues) => {
+    Object.assign(acc, keyValues);
+    return acc;
+  }, {});
+}
+
+export function combineScss(data: Record<string, string>[], finalScssFile: string) {
   const finalScssFileExisted = fs.existsSync(finalScssFile);
   if (finalScssFileExisted) {
     fs.writeFileSync(finalScssFile, '');
   }
 
   const options: fs.WriteFileOptions = { encoding: "utf8", flag: "a+" };
-  const scssStrMap = Object.entries(data);
-  scssStrMap.forEach(([_, scssStr], index) => {
+
+  Object.entries(getScssStrMap(data)).forEach(([_, scssStr]) => {
     fs.writeFileSync(finalScssFile, JSON.parse(JSON.stringify(scssStr)), options);
-    if (index === scssStrMap.length - 1) return;
     fs.writeFileSync(finalScssFile, '\n', options);
   })
 }
