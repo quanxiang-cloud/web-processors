@@ -52,9 +52,9 @@ func (p *persona) Do(ctx context.Context, params *Parameter) error {
 }
 
 func (p *persona) genPersonaKey(ctx context.Context, params *Parameter) string {
-	_, tenantIDValue := header.GetTenantID(ctx).Wreck()
+	// _, tenantIDValue := header.GetTenantID(ctx).Wreck()
 	key := strings.Join(p.removeEmptyStr([]string{
-		tenantIDValue,
+		// tenantIDValue,
 		params.AppID,
 		p.conf.PersonaKeySuffix,
 	}), ":")
