@@ -63,7 +63,7 @@ func (f *fileserver) genStorePath(params *Parameter) string {
 
 	return fmt.Sprintf(
 		"%s/%s/%s",
-		f.conf.UploadPrefix,
+		f.conf.StorePathPrefix,
 		params.CssFileHash,
 		filename,
 	)

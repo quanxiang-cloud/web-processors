@@ -54,6 +54,11 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 	}
 
 	arr := strings.Split(stdout, ",")
+	if len(arr) != 2 {
+		logger.Logger.WithName("Execute Evolution").Errorw("invalid stdout", header.GetRequestIDKV(ctx).Fuzzy()...)
+		return error2.New(code.ErrExecute)
+	}
+
 	params.CssFileHash = arr[0]
 	params.CssFilePath = arr[1]
 	params.UploadFilePath = saveUploadPath
