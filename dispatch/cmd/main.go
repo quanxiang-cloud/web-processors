@@ -74,12 +74,14 @@ func main() {
 	}
 }
 
+// Arr array.
 type Arr []string
 
 func (a *Arr) String() string {
 	return fmt.Sprint(*a)
 }
 
+// Set set.
 func (a *Arr) Set(s string) error {
 	*a = append(*a, strings.Split(s, ",")...)
 	return nil

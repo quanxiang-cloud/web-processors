@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	assign = "assign"
+	processors = "processors"
 )
 
+// Router is the router.
 type Router struct {
 	conf   *config.Config
 	engine *gin.Engine
@@ -20,15 +21,16 @@ type Router struct {
 type router func(c *config.Config, r map[string]*gin.RouterGroup) error
 
 var routers = []router{
-	assignRouter,
+	processorsRouter,
 }
 
+// NewRouter returns a new router.
 func NewRouter(c *config.Config) (*Router, error) {
 	engine := gin.New()
 	engine.Use(gin2.LoggerFunc(), gin2.RecoveryFunc())
 
 	r := map[string]*gin.RouterGroup{
-		assign: engine.Group("/api/v1/assign"),
+		processors: engine.Group("/api/v1/web-processors"),
 	}
 
 	for _, f := range routers {
@@ -43,12 +45,13 @@ func NewRouter(c *config.Config) (*Router, error) {
 	}, nil
 }
 
+// Run serve starts the server.
 func (r *Router) Run() {
 	r.engine.Run(r.conf.Port)
 }
 
-func assignRouter(c *config.Config, r map[string]*gin.RouterGroup) error {
-	r[assign].POST("/exec", Execute(chain.NewEvolution(c)))
+func processorsRouter(c *config.Config, r map[string]*gin.RouterGroup) error {
+	r[processors].POST("/execute", Execute(chain.NewEvolution(c)))
 
 	return nil
 }
