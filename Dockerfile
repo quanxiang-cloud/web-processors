@@ -12,8 +12,7 @@ RUN CGO_ENABLED=0 go build  -o ./bin/dispatch -mod=vendor -ldflags='-s -w'  -ins
 
 
 
-# FROM scratch
-FROM ubuntu
+FROM scratch
 COPY --from=certs /etc/ssl/certs /etc/ssl/certs
 
 WORKDIR /dispatch
