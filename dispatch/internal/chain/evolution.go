@@ -20,7 +20,7 @@ type evolution struct {
 }
 
 // NewEvolution returns a new evolution command.
-func NewEvolution(conf *config.Config) *evolution {
+func NewEvolution(conf *config.Config) Command {
 	return &evolution{
 		next: NewFileserver(conf),
 		conf: conf,

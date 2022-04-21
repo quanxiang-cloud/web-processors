@@ -20,7 +20,7 @@ type fileserver struct {
 }
 
 // NewFileserver returns a new fileserver command.
-func NewFileserver(conf *config.Config) *fileserver {
+func NewFileserver(conf *config.Config) Command {
 	return &fileserver{
 		next: NewPersona(conf),
 		conf: conf,
