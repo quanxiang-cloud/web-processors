@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from 'path';
 
-const hostname = process.env.hostname || 'http://persona.alpha'; 
+const hostname = process.env.PERSONA_HOSTNAME || 'http://persona'; 
 
 export function buildURL(targetPath: string): string {
   return `${hostname}${targetPath}`;
