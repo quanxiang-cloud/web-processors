@@ -17,7 +17,7 @@ type persona struct {
 }
 
 // NewPersona returns a new persona command.
-func NewPersona(conf *config.Config) *persona {
+func NewPersona(conf *config.Config) Command {
 	return &persona{
 		conf: conf,
 	}

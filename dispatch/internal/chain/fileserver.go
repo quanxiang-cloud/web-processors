@@ -20,7 +20,7 @@ type fileserver struct {
 }
 
 // NewFileserver returns a new fileserver command.
-func NewFileserver(conf *config.Config) *fileserver {
+func NewFileserver(conf *config.Config) Command {
 	return &fileserver{
 		next: NewPersona(conf),
 		conf: conf,
@@ -37,13 +37,13 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 		storePath   = f.genStorePath(params)
 	)
 
-	defer os.RemoveAll(params.CssFilePath)
+	defer os.RemoveAll(params.CSSFilePath)
 
 	cmd := &exec.Cmd{
 		Path: commandPath,
 		Args: []string{
 			commandPath,
-			"-filePath", params.CssFilePath,
+			"-filePath", params.CSSFilePath,
 			"-storePath", storePath,
 		},
 	}
@@ -59,12 +59,12 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 }
 
 func (f *fileserver) genStorePath(params *Parameter) string {
-	_, filename := filepath.Split(params.CssFilePath)
+	_, filename := filepath.Split(params.CSSFilePath)
 
 	return fmt.Sprintf(
 		"%s/%s/%s",
 		f.conf.StorePathPrefix,
-		params.CssFileHash,
+		params.CSSFileHash,
 		filename,
 	)
 }
