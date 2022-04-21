@@ -42,8 +42,8 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 	cmd := &exec.Cmd{
 		Path: e.Name(),
 		Env: []string{
-			genEnv(INPUT_FILE, saveUploadPath),
-			genEnv(PERSONA_HOSTNAME, e.conf.PersonaEndpoint),
+			genEnv(InputFile, saveUploadPath),
+			genEnv(PersonaHostName, e.conf.PersonaEndpoint),
 		},
 	}
 

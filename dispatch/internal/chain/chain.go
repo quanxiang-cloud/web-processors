@@ -45,8 +45,8 @@ func genCommandPath(dir, name string) string {
 
 // env name.
 const (
-	INPUT_FILE       = "INPUT_FILE"
-	PERSONA_HOSTNAME = "PERSONA_HOSTNAME"
+	InputFile       = "INPUT_FILE"
+	PersonaHostName = "PERSONA_HOSTNAME"
 )
 
 func genEnv(key, value string) string {
