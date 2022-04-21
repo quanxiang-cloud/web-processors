@@ -59,8 +59,8 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 		return error2.New(code.ErrExecute)
 	}
 
-	params.CssFileHash = arr[0]
-	params.CssFilePath = arr[1]
+	params.CSSFileHash = arr[0]
+	params.CSSFilePath = arr[1]
 	params.UploadFilePath = saveUploadPath
 
 	return e.next.Do(ctx, params)

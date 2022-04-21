@@ -23,8 +23,8 @@ type Parameter struct {
 // Universal is the universal parameter.
 type Universal struct {
 	UploadFilePath string
-	CssFilePath    string
-	CssFileHash    string
+	CSSFilePath    string
+	CSSFileHash    string
 	StorePath      string
 }
 
