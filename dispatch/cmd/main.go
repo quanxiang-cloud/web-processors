@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	port         string
-	uploadDir    string
-	commandDir   string
-	uploadPrefix string
+	port            string
+	uploadDir       string
+	commandDir      string
+	storePathPrefix string
 
 	personaEndpoint  string
 	personaKeySuffix string
@@ -44,10 +44,10 @@ func main() {
 		ErrorOutputPath: errorOutputPath,
 	})
 	conf := &config.Config{
-		Port:         port,
-		UploadDir:    uploadDir,
-		CommandDir:   commandDir,
-		UploadPrefix: uploadPrefix,
+		Port:            port,
+		UploadDir:       uploadDir,
+		CommandDir:      commandDir,
+		StorePathPrefix: storePathPrefix,
 
 		PersonaEndpoint:  personaEndpoint,
 		PersonaKeySuffix: personaKeySuffix,
@@ -90,7 +90,7 @@ func loggerFlag() {
 	flag.StringVar(&uploadDir, "upload-dir", ".", "upload dir")
 	// NOTE: command save directory is consistent with the save directory in dockerfile
 	flag.StringVar(&commandDir, "command-dir", "scripts", "command dir")
-	flag.StringVar(&uploadPrefix, "upload-prefix", "web-processors/config/css", "upload prefix")
+	flag.StringVar(&storePathPrefix, "store-path-prefix", "web-processors/config/css", "store path prefix")
 	flag.StringVar(&personaEndpoint, "persona-endpoint", "http://persona", "persona endpoint")
 	flag.StringVar(&personaKeySuffix, "persona-key-suffix", "style_guide_css:draft", "persona key suffix")
 	flag.StringVar(&personaVersion, "persona-version", "1.0.0", "persona version")
