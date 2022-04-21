@@ -23,8 +23,8 @@ type Parameter struct {
 // Universal is the universal parameter.
 type Universal struct {
 	UploadFilePath string
-	CssFilePath    string
-	CssFileHash    string
+	CSSFilePath    string
+	CSSFileHash    string
 	StorePath      string
 }
 
@@ -45,8 +45,8 @@ func genCommandPath(dir, name string) string {
 
 // env name.
 const (
-	INPUT_FILE       = "INPUT_FILE"
-	PERSONA_HOSTNAME = "PERSONA_HOSTNAME"
+	InputFile       = "INPUT_FILE"
+	PersonaHostName = "PERSONA_HOSTNAME"
 )
 
 func genEnv(key, value string) string {

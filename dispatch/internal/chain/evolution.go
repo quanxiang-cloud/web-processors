@@ -20,7 +20,7 @@ type evolution struct {
 }
 
 // NewEvolution returns a new evolution command.
-func NewEvolution(conf *config.Config) *evolution {
+func NewEvolution(conf *config.Config) Command {
 	return &evolution{
 		next: NewFileserver(conf),
 		conf: conf,
@@ -42,8 +42,8 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 	cmd := &exec.Cmd{
 		Path: e.Name(),
 		Env: []string{
-			genEnv(INPUT_FILE, saveUploadPath),
-			genEnv(PERSONA_HOSTNAME, e.conf.PersonaEndpoint),
+			genEnv(InputFile, saveUploadPath),
+			genEnv(PersonaHostName, e.conf.PersonaEndpoint),
 		},
 	}
 
@@ -59,8 +59,8 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 		return error2.New(code.ErrExecute)
 	}
 
-	params.CssFileHash = arr[0]
-	params.CssFilePath = arr[1]
+	params.CSSFileHash = arr[0]
+	params.CSSFilePath = arr[1]
 	params.UploadFilePath = saveUploadPath
 
 	return e.next.Do(ctx, params)

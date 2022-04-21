@@ -11,9 +11,9 @@ RUN CGO_ENABLED=0 go build  -o ./bin/web-processors -mod=vendor -ldflags='-s -w'
 
 
 
-FROM scratch
+FROM ubuntu
 COPY --from=certs /etc/ssl/certs /etc/ssl/certs
 
-WORKDIR /dispatch
+WORKDIR /web-processors
 COPY --from=builder ./build/bin .
 COPY --from=builder ./build/packages/stc/dist/evolution ./scripts/evolution
