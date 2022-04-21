@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "prepkg": "npm run build",
-    "pkg": "./node_modules/.bin/pkg -o dist/evolution lib/index.js",
+    "pkg": "./node_modules/.bin/pkg -t node16-linux-x64 -o dist/evolution lib/index.js",
     "test": "jest",
     "test:coverage": "jest --collectCoverage",
     "updateSnapshot": "jest --updateSnapshot"
