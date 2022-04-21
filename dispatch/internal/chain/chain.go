@@ -14,8 +14,7 @@ type Command interface {
 
 // Parameter parameter.
 type Parameter struct {
-	AppID string `json:"appID"`
-	// Token string `json:"token" binding:"required"`
+	AppID   string `json:"appID"`
 	Element string `json:"element" binding:"required"`
 
 	Universal
@@ -47,7 +46,7 @@ func genCommandPath(dir, name string) string {
 // env name.
 const (
 	INPUT_FILE       = "INPUT_FILE"
-	PERSONA_HOSTNAME = "PERSONA_HOSTNAME"
+	PERSONA_HOSTNAME = "PERSONA_HOST_NAME"
 )
 
 func genEnv(key, value string) string {
