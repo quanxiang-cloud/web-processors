@@ -146,6 +146,8 @@ github.com/quanxiang-cloud/cabin v0.0.6 h1:uxerBHGsIdKneFnjV2lyYsXdNTrunvlG28lDW
 github.com/quanxiang-cloud/cabin v0.0.6/go.mod h1:/H6paYmIp5DQaTRdHT5k//ced2DK83c7Ju8u8MT3QQc=
 github.com/quanxiang-cloud/fileserver v0.0.0-20220418023403-9694acb667ab h1:R3BL+DH/7sNMMAx6d6jGwm2k2n55ZuBLhv7zHnmwvEM=
 github.com/quanxiang-cloud/fileserver v0.0.0-20220418023403-9694acb667ab/go.mod h1:hHI1gFau6qWD7FEU8FSRsU2wCKIS91SCz9Yw5Jbrccg=
+github.com/quanxiang-cloud/fileserver v0.0.0-20220425072253-1136430149db h1:jI5aIFg2cJ2lnywoIDmD1lA6zJfOX5+aypDHkBQvftU=
+github.com/quanxiang-cloud/fileserver v0.0.0-20220425072253-1136430149db/go.mod h1:hHI1gFau6qWD7FEU8FSRsU2wCKIS91SCz9Yw5Jbrccg=
 github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
 github.com/rogpeppe/go-internal v1.6.1/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
 github.com/rogpeppe/go-internal v1.8.0 h1:FCbCCtXNOY3UtUuHUYaghJg4y7Fd14rXifAYUAtL9R8=
