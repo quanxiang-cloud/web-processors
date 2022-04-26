@@ -28,7 +28,7 @@ func main() {
 
 	url := fmt.Sprintf("%s/%s", *endpoint, *api)
 	err := client.POST(context.Background(), &a, url, struct {
-		Params []map[string]interface{} `json:"params"`
+		Params []map[string]interface{} `json:"keys"`
 	}{
 		Params: []map[string]interface{}{
 			{
