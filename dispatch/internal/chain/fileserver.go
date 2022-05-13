@@ -64,7 +64,16 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 
 func (f *fileserver) genStorePath(params *Parameter) string {
 	_, filename := filepath.Split(params.CSSFilePath)
+	logger.Logger.WithName("xxxx").Infow("css file name", filename)
 
+	s := fmt.Sprintf(
+		"%s/%s/%s",
+		f.conf.StorePathPrefix,
+		params.CSSFileHash,
+		filename,
+	)
+
+	logger.Logger.WithName("xxxx").Infow("store path", s)
 	return fmt.Sprintf(
 		"%s/%s/%s",
 		f.conf.StorePathPrefix,
