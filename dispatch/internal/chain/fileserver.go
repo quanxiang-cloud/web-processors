@@ -49,11 +49,12 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 			"-storePath", storePath,
 		},
 	}
-
-	if _, err := execute(cmd); err != nil {
+	ss, err := execute(cmd)
+	if err != nil {
 		logger.Logger.WithName("Execute Fileserver").Errorw(err.Error(), header.GetRequestIDKV(ctx).Fuzzy()...)
 		return error2.New(code.ErrExecute)
 	}
+	logger.Logger.WithName("Execute Fileserver").Info("fileserver result", ss)
 
 	params.StorePath = storePath
 

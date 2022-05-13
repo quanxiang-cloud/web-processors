@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"log"
 	"os"
 
 	"github.com/quanxiang-cloud/fileserver/pkg/guide"
@@ -35,7 +34,7 @@ func main() {
 		panic(err)
 	}
 
-	log.Println("uploading...")
+	os.Stdout.WriteString("uploading...")
 
 	err = g.FutileUploadFile(context.Background(), *storePath, file, fi.Size(), guide.Readable)
 	if err != nil {
@@ -43,5 +42,5 @@ func main() {
 		panic(err)
 	}
 
-	log.Println("Done...")
+	os.Stdout.WriteString("done")
 }
