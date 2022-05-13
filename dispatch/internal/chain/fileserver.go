@@ -32,6 +32,7 @@ func (f *fileserver) Name() string {
 }
 
 func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
+	logger.Logger.Infof("template string %#v", params)
 	var (
 		commandPath = f.Name()
 		storePath   = f.genStorePath(params)
@@ -63,6 +64,7 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 }
 
 func (f *fileserver) genStorePath(params *Parameter) string {
+	logger.Logger.WithName("xxxx").Infow("zzz", params.CSSFilePath)
 	_, filename := filepath.Split(params.CSSFilePath)
 	logger.Logger.WithName("xxxx").Infow("css file name", filename)
 
