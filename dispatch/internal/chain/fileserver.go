@@ -37,6 +37,8 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 		storePath   = f.genStorePath(params)
 	)
 
+	logger.Logger.WithName("xxxx").Infow("AAAAAAA", storePath)
+
 	defer os.RemoveAll(params.CSSFilePath)
 
 	cmd := &exec.Cmd{
