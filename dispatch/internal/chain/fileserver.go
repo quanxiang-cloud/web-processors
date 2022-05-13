@@ -37,7 +37,7 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 	commandPath := f.Name()
 	storePath := f.genStorePath(params)
 
-	logger.Logger.WithName("xxxx").Infow("AAAAAAA", commandPath, storePath)
+	logger.Logger.WithName("xxxx").Info("AAAAAAA", commandPath, storePath)
 
 	defer os.RemoveAll(params.CSSFilePath)
 
@@ -57,15 +57,15 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 
 	params.StorePath = storePath
 
-	logger.Logger.WithName("xxxx").Infow("zzz", params.StorePath)
+	logger.Logger.WithName("xxxx").Info("zzz", params.StorePath)
 
 	return f.next.Do(ctx, params)
 }
 
 func (f *fileserver) genStorePath(params *Parameter) string {
-	logger.Logger.WithName("xxxx").Infow("zzz", params.CSSFilePath)
+	logger.Logger.WithName("xxxx").Info("zzz", params.CSSFilePath)
 	_, filename := filepath.Split(params.CSSFilePath)
-	logger.Logger.WithName("xxxx").Infow("css file name", filename)
+	logger.Logger.WithName("xxxx").Info("css file name", filename)
 
 	s := fmt.Sprintf(
 		"%s/%s/%s",
@@ -74,7 +74,7 @@ func (f *fileserver) genStorePath(params *Parameter) string {
 		filename,
 	)
 
-	logger.Logger.WithName("xxxx").Infow("store path", s)
+	logger.Logger.WithName("xxxx").Info("store path", s)
 	return fmt.Sprintf(
 		"%s/%s/%s",
 		f.conf.StorePathPrefix,
