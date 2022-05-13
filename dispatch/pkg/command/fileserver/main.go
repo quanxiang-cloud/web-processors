@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/quanxiang-cloud/fileserver/pkg/guide"
@@ -35,6 +36,9 @@ func main() {
 	}
 
 	os.Stdout.WriteString("uploading...")
+
+	os.Stdout.WriteString(fmt.Sprintf("size: %s", fi.Size()))
+	os.Stdout.WriteString(fmt.Sprintf("size: %+v", file))
 
 	err = g.FutileUploadFile(context.Background(), *storePath, file, fi.Size(), guide.Readable)
 	if err != nil {
