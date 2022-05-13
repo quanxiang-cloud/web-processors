@@ -33,12 +33,11 @@ func (f *fileserver) Name() string {
 
 func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 	logger.Logger.Infof("template string %#v", params)
-	var (
-		commandPath = f.Name()
-		storePath   = f.genStorePath(params)
-	)
 
-	logger.Logger.WithName("xxxx").Infow("AAAAAAA", storePath)
+	commandPath := f.Name()
+	storePath := f.genStorePath(params)
+
+	logger.Logger.WithName("xxxx").Infow("AAAAAAA", commandPath, storePath)
 
 	defer os.RemoveAll(params.CSSFilePath)
 
