@@ -37,7 +37,7 @@ func main() {
 
 	os.Stdout.WriteString("uploading...")
 
-	os.Stdout.WriteString(fmt.Sprintf("size: %s", fi.Size()))
+	os.Stdout.WriteString(fmt.Sprintf("size: %d", fi.Size()))
 	os.Stdout.WriteString(fmt.Sprintf("size: %+v", file))
 
 	err = g.FutileUploadFile(context.Background(), *storePath, file, fi.Size(), guide.Readable)
