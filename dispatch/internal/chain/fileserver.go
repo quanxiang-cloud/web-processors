@@ -3,7 +3,6 @@ package chain
 import (
 	"context"
 	"fmt"
-	"os"
 	"os/exec"
 	"path/filepath"
 
@@ -39,7 +38,7 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 
 	logger.Logger.WithName("xxxx").Info("AAAAAAA", commandPath, storePath)
 
-	defer os.RemoveAll(params.CSSFilePath)
+	// defer os.RemoveAll(params.CSSFilePath)
 
 	cmd := &exec.Cmd{
 		Path: commandPath,
