@@ -63,6 +63,7 @@ func (e *evolution) Do(ctx context.Context, params *Parameter) error {
 	params.CSSFilePath = arr[1]
 	params.UploadFilePath = saveUploadPath
 
+	logger.Logger.WithName("Execute Evolution").Infow(params.CSSFileHash, params.CSSFilePath, params.UploadFilePath)
 	return e.next.Do(ctx, params)
 }
 

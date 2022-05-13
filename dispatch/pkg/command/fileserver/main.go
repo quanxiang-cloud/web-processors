@@ -19,16 +19,19 @@ func main() {
 
 	file, err := os.Open(*filePath)
 	if err != nil {
+		os.Stderr.WriteString(err.Error())
 		panic(err)
 	}
 
 	fi, err := file.Stat()
 	if err != nil {
+		os.Stderr.WriteString(err.Error())
 		panic(err)
 	}
 
 	g, err := guide.NewGuide()
 	if err != nil {
+		os.Stderr.WriteString(err.Error())
 		panic(err)
 	}
 
@@ -36,6 +39,7 @@ func main() {
 
 	err = g.FutileUploadFile(context.Background(), *storePath, file, fi.Size(), guide.Readable)
 	if err != nil {
+		os.Stderr.WriteString(err.Error())
 		panic(err)
 	}
 

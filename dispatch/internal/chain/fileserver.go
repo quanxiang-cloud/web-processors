@@ -55,6 +55,8 @@ func (f *fileserver) Do(ctx context.Context, params *Parameter) error {
 
 	params.StorePath = storePath
 
+	logger.Logger.WithName("xxxx").Infow("zzz", params.StorePath)
+
 	return f.next.Do(ctx, params)
 }
 
